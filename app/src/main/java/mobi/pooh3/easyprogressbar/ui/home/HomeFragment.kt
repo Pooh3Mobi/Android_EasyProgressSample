@@ -17,7 +17,10 @@ import androidx.navigation.fragment.NavHostFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 import mobi.pooh3.easyprogressbar.R
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), MyProgressBarControllerDelegate {
+    override val handler: Handler by lazy { Handler(Looper.getMainLooper()) }
+    override val progress0: View by lazy { progressView0 }
+    override val progress1: View by lazy { progressView1 }
 
     private lateinit var homeViewModel: HomeViewModel
 
@@ -49,39 +52,14 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        showUnlimitedProgress(delay = 0L)
-    }
-
-    private val handler = Handler(Looper.getMainLooper())
-    private fun showUnlimitedProgress(count: Int = 0, delay: Long) {
-        handler.postDelayed(delay) {
-            when (count % 3) {
-                0 -> {
-                    changeProgress(progress0, 0f, needAnimate = true)
-                    changeProgress(progress1, 100f, needAnimate = true)
-                }
-                1 -> {
-                    changeProgress(progress0, 100f, needAnimate = true)
-                    changeProgress(progress1, 0f, needAnimate = true)
-                }
-                2 -> {
-                    changeProgress(progress0, 0f, needAnimate = false)
-                    changeProgress(progress1, 0f, needAnimate = false)
-                }
-            }
-
-            showUnlimitedProgress(count + 1, 400L)
+        showMyProgress()
+        handler.postDelayed(5_000L) {
+            dismissMyProgress()
         }
     }
 
-    private fun changeProgress(progressView: View, progressInt: Float, needAnimate: Boolean) {
-        with(progressView) {
-            val lp = layoutParams as LinearLayout.LayoutParams
-            lp.weight = progressInt
-            layoutParams = lp
-            if (needAnimate) {
-                (this.parent as ViewGroup).layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-            }
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        destroyMyProgress()
     }
 }
