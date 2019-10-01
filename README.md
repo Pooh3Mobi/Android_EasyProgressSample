@@ -7,7 +7,9 @@ Easy Original Progress Sample Code. See activity_main.xml and MyBottomNavProgres
 
 <img src="https://user-images.githubusercontent.com/1821958/65977988-d5dcc000-e4ad-11e9-86bc-d938f7ddfcea.gif">
 
-
+For animation codes.
+1. `(this.parent as ViewGroup).layoutTransition.enableTransitionType(android.animation.LayoutTransition.CHANGING)`
+2. `android:animateLayoutChanges="true"` attribution in `LinearLayout`.
 
 ```kotlin
 interface MyBottomNavProgressControllerDelegate {
@@ -24,9 +26,7 @@ interface MyBottomNavProgressControllerDelegate {
     }
 }
 ```
-
-need `android:animateLayoutChanges="true"` attribution.
-
+activity_main.xml
 ```xml
     <LinearLayout
         android:id="@+id/progressbar"
